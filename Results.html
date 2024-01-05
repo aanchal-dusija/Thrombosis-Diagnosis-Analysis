@@ -1,0 +1,520 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p
+	{margin:0in;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpFirst, li.MsoListParagraphCxSpFirst, div.MsoListParagraphCxSpFirst
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpMiddle, li.MsoListParagraphCxSpMiddle, div.MsoListParagraphCxSpMiddle
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+p.MsoListParagraphCxSpLast, li.MsoListParagraphCxSpLast, div.MsoListParagraphCxSpLast
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Calibri",sans-serif;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0in;}
+ul
+	{margin-bottom:0in;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-size:20.0pt;
+font-family:"Times New Roman",serif'>ANLY 503 - Homework 2</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-size:20.0pt;
+font-family:"Times New Roman",serif'>By Aanchal Dusija</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-size:20.0pt;
+font-family:"Times New Roman",serif'>Github - https://github.com/anly503/hw2-spring-2023-aanchal-dusija</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-size:14.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><b><u><span style='font-size:
+18.0pt;font-family:"Times New Roman",serif'>Introduction</span></u></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>:</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The University hospital collects databases
+from patients who visit their outpatient clinic for collagen diseases, which
+are auto-immune diseases where patients generate antibodies that attack their
+own bodies. Thrombosis is a severe and potentially fatal complication of
+collagen diseases and is closely related to anti-cardiolipin antibodies. It is
+a medical emergency, and it is crucial to be able to detect and predict the
+possibility of it occurring.  Thrombosis is a medical condition in which blood
+clots form within the blood vessels, leading to a range of potentially serious
+health problems. The datasets for discovering regularities in thrombosis have
+been donated for analysis. </span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><b><u><span style='font-size:
+18.0pt;font-family:"Times New Roman",serif'>The Datasets:</span></u></b></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The three tables provided in the dataset
+have information on patients, their laboratory test results, and their medical
+history. The database consists of three tables: tsumoto_a.csv, tsumoto_b.csv,
+and tsumoto_c.csv. The patients in these tables are connected by their ID
+number. </span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The tsumoto_a.csv table provides basic
+information about all patients, which includes their demographic details,
+medical history, and other relevant information. This table forms the starting
+point for exploring the patient data.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The tsumoto_b.csv table contains
+information on special laboratory examinations that were performed on a subset
+of patients. The results of these tests can help in the diagnosis of certain
+conditions, including collagen diseases, and provide valuable insights into the
+health of the patients. This table includes various measures of coagulation,
+such as KCT, RVVT, and LAC, as well as ANA Pattern and aCL IgA anti-Cardiolipin
+antibody (IgA) test results. It also includes a multivalued attribute for
+diagnosis and symptoms, including the degree of thrombosis.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The tsumoto_c.csv table provides
+information on laboratory examinations stored in the hospital information
+systems, including the results of routine laboratory tests and their dates.
+This table includes various measures of blood components, such as hemoglobin,
+platelet, and white blood cell counts, as well as liver and kidney function
+tests and measures of coagulation, such as PT, APTT, and FG. It also includes
+information on the presence of certain antibodies, including anti-DNA,
+anti-ribonuclear protein, and anti-SSA.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>After cleaning the datasets, we merge the
+data from different tables to create a comprehensive patient profile. We
+consider only the patients that are common in all three datasets. Additionally,
+we create new columns in the dataset, which are as follows:</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;text-align:justify;
+text-indent:-.25in'><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>1.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>Age: This is the
+age of the patient in the database on the date of the thrombosis test. </span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify;
+text-indent:-.25in'><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>2.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>Thrombosis_bol: It
+is a Boolean variable indicating if a patient has thrombosis or not.</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify;
+text-indent:-.25in'><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>Thrombosistestyears:
+It calculates the time distance between the standard laboratory examination and
+the thrombosis test. </span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><b><u><span style='font-size:
+18.0pt;font-family:"Times New Roman",serif'>Research Analysis: </span></u></b></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='margin-left:.25in;text-align:justify;text-indent:-.25in;background:
+white'><span style='font-size:16.0pt'>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;color:black'>How does the level of
+thrombosis relate to the average age and level of Creatinine?  </span></p>
+
+<p style='margin-left:.25in;text-align:justify;background:white'><span
+style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><img width=468 height=319
+src="Results.fld/image001.png" align=left hspace=12
+alt="Calendar&#10;&#10;Description automatically generated"></p>
+
+<p style='background:white'><b><span style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><b><span style='color:black'>Figure
+1 - Age v/s Creatinine Based on Level of Thrombosis</span></b></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt;
+color:black'>From Figure 1, it seems that there is a negative correlation
+between the severity of thrombosis and creatinine levels in patients. This
+means that as the severity of thrombosis increases, the creatinine levels of
+the patient decrease. However, age does not seem to be a determining factor in
+whether a patient can get thrombosis or not. This means that a patient of any
+age can develop thrombosis, although certain factors may increase the
+likelihood of developing thrombosis such as genetic predisposition, certain
+medical conditions, and lifestyle factors. It is important to note that this
+observation is based on a specific dataset and may not necessarily apply to all
+patients with thrombosis. The relationship between thrombosis and creatinine
+levels may also be influenced by other factors, such as the presence of other
+medical conditions or the use of certain medications. It is important to
+further investigate this relationship to better understand the underlying
+mechanisms and to identify potential treatment options for patients with
+thrombosis.</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><span style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='margin-left:.25in;text-align:justify;text-indent:-.25in;background:
+white'><span style='font-size:16.0pt'>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;
+</span></span><span style='font-size:16.0pt;color:black'>What is the
+relationship between patient demographics (Sex, Admission) and the presence of
+Thrombosis, as measured by Age and Symptoms?</span></p>
+
+<p style='margin-left:.25in;text-align:justify;background:white'><span
+style='font-size:16.0pt'>&nbsp;</span></p>
+
+<p style='text-align:justify;background:white'><img width=468 height=289
+src="Results.fld/image002.png" align=left hspace=12
+alt="Chart, scatter chart&#10;&#10;Description automatically generated"></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p align=center style='text-align:center;background:white'><b><span
+style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p style='background:white'><b><span style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p style='background:white'><b><span style='color:black'>Figure 2 - Relation
+between Age and Symptoms based on Patient Demographics for Thrombosis</span></b></p>
+
+<p style='margin-left:.5in;background:white'><b><span style='font-size:16.0pt'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Figure 2 provides a comprehensive analysis
+of the relationship between several variables and thrombosis. The plot depicts
+Age, Symptoms, Sex, Admission Status, and Indication of Thrombosis. It is
+evident that females are more prone to developing thrombosis compared to males,
+as indicated by the larger number of female patients with thrombosis.
+Interestingly, many patients who were previously not admitted to the hospital
+were detected with thrombosis, which emphasizes the importance of timely
+diagnosis and treatment.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Further analysis of the plot reveals that
+females displayed a wider range of symptoms associated with thrombosis, such as
+brain infarction, finger ulcer, and abortion. In contrast, men exhibited fewer
+symptoms, such as CNS lupus, AMI, and MI. It is also noteworthy that age did
+not appear to have any significant relationship with the variables studied.
+These findings suggest that age may not be a significant risk factor for
+thrombosis, and that other factors, such as sex and symptoms, may play a more
+significant role.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Overall, Figure 2 provides valuable
+insights into the factors that may be associated with the development of
+thrombosis and highlights the need for further research to better understand
+this complex condition.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;text-align:justify;
+text-indent:-.25in'><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>3.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>What is the
+relationship between the levels of Lactate Dehydrogenase (LDH) and the Years
+from the Thrombosis Test?</span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'><img width=468 height=289 id="Picture 3"
+src="Results.fld/image003.png"></span></p>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-family:"Times New Roman",serif'>Figure
+3 - Lactate Dehydrogenase vs Thrombosis Test Years</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>The study aimed to identify any
+characteristic time patterns related to thrombosis by defining a derived
+attribute called Thrombosis Test Years, which is the time distance between the
+standard laboratory examination and the thrombosis test. The findings showed
+that the average Lactate Dehydrogenase values increased leading up to the date
+of thrombosis diagnosis and then decreased again. This pattern can be observed
+if one has a keen eye and uses a bit of imagination.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Specifically, the study found that as the
+time distance between the laboratory examination and the thrombosis test
+decreased, the average Lactate Dehydrogenase values gradually increased. This
+increase continued until the date of thrombosis diagnosis, after which the
+average Lactate Dehydrogenase values started to decrease again. This trend
+suggests that Lactate Dehydrogenase values can potentially be used as a marker
+to predict the occurrence of thrombosis, as it appears to be elevated leading
+up to the thrombosis event.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Overall, this finding suggests that
+regular monitoring of Lactate Dehydrogenase levels may be beneficial for those
+who are at high risk of developing thrombosis. </span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraphCxSpFirst style='margin-left:.25in;text-align:justify;
+text-indent:-.25in'><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>4.<span
+style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp; </span></span><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> What is the
+relationship between levels of Uric Acid and Urea Nitrogen based on Thrombosis
+and Gender? </span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'><img width=468
+height=289 id="Picture 6" src="Results.fld/image004.png"
+alt="Chart, scatter chart&#10;&#10;Description automatically generated"></span></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify'><b><span
+style='font-family:"Times New Roman",serif'>Figure 4 - Relation between Uric
+Acid and Urea Nitrogen Based on Thrombosis and Gender</span></b></p>
+
+<p class=MsoListParagraphCxSpMiddle style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoListParagraphCxSpLast style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>In Figure 4, a scatter plot is created to
+display the relationship between Uric Acid and Urea Nitrogen levels, while also
+incorporating subplots based on the level of thrombosis and gender. The results
+show that females have a higher likelihood of developing thrombosis at all
+levels when compared to males.</span></p>
+
+<p class=MsoListParagraph style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>As the level of thrombosis increases, the
+concentration of both uric acid and urea nitrogen decreases, indicating an
+inverse relationship between the two. This finding suggests that higher levels
+of thrombosis may be associated with decreased levels of uric acid and urea
+nitrogen. Moreover, the subplots based on gender demonstrate that the trend of
+decreasing uric acid and urea nitrogen with increasing thrombosis levels is
+consistent for both males and females. </span></p>
+
+<p class=MsoListParagraph style='margin-left:.25in;text-align:justify'><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>Overall, these results suggest that
+monitoring uric acid and urea nitrogen levels may be useful in identifying
+individuals who are at higher risk for developing thrombosis. </span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;display:none'>Bottom of Form</span><b><u><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>Conclusion</span></u></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>:</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>In summary, the figures presented in this
+text provide valuable insights into the relationship between thrombosis and
+various factors such as creatinine levels, patient demographics, lactate
+dehydrogenase levels, and uric acid and urea nitrogen levels. The findings
+suggest that factors such as sex, symptoms, and lactate dehydrogenase levels
+may be useful in predicting the occurrence of thrombosis, and regular
+monitoring of these factors may be beneficial for those who are at high risk of
+developing thrombosis. Additionally, the inverse relationship between
+thrombosis levels and uric acid and urea nitrogen levels suggests that
+monitoring these levels may also be useful in identifying individuals at higher
+risk for thrombosis. Further research is needed to better understand the
+complex relationship between thrombosis and these factors and to identify
+potential treatment options for patients with thrombosis.</span></p>
+
+<p class=MsoNormal style='text-align:justify'><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>

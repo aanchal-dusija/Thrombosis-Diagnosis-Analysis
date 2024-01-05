@@ -1,0 +1,368 @@
+---
+title: "EDA on Medical Data of Thrombosis Diagnosis"
+author: 
+    name: Aanchal Dusija
+date: today
+format: 
+    html:
+      embedded-resources: true
+      self-contained: true
+      preview-links: auto
+editor: visual
+---
+
+Github url: https://github.com/anly503/hw2-spring-2023-aanchal-dusija
+
+# Medical Data Desciption
+
+At the university hospital, databases are collected. Each patient arrived at the collagen diseases outpatient clinic after being introduced by a few home doctors or general practitioners at the nearby hospitals. Patients with collagen illnesses develop antibodies that damage their bodies, making them auto-immune diseases. Only a portion of the illness mechanisms are understood, and it is still unclear how to categorize them. Some people may produce a variety of antibodies, and all the signs and symptoms of collagen illnesses may be present in their symptoms.
+
+Thrombosis is one of the most serious complications, and one of the leading causes of death in collagen diseases. Recently, this complication has been linked to anti-cardiolipin antibodies, which were discovered by medical doctors, one of whom donated datasets for the discovery challenge.Thrombosis is a medical emergency, and it is critical to detect and predict the possibility of thrombosis.
+
+The data is stored in three tables (tsumoto_a.csv, tsumoto_b.csv, tsumoto_c.csv) and the patients in these tables are connected by their ID number.The data used in the study includes information about the patients such as their identification, sex, birthday, description date, first date, admission, and diagnosis. There is also information about the examination date and results of aCL IgG and aCL IgM tests.
+
+# Questions to investigate
+
+1.  How does the level of thrombosis relate to the average age and level of Creatinine?
+
+2.  What is the relationship between patient demographics (Sex, Admission) and the presence of Thrombosis, as measured by Age and Symptoms?
+
+3.  What is the relationship between the levels of Lactate Dehydrogenase (LDH) and the Years from the Thrombosis Test?
+
+4.  What is the relationship between levels of Uric Acid and Urea Nitrogen based on Thrombosis and Gender?
+
+```{r, results='hide', echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr)
+library(tidyverse)
+library(Hmisc)
+library(corrplot)
+library(styler)
+library(stringr)
+library(lintr)
+library(ggplot2)
+library(tidyr)
+library(visdat)
+```
+
+### Data Munging
+
+```{r}
+# Loading the Data
+data1<-read.csv("data/TSUMOTO_A.csv", header = TRUE, sep=",",fileEncoding="latin1")
+data2<-read.csv("data/TSUMOTO_B.csv",header = TRUE, sep=",",fileEncoding="latin1")
+data3<-read.csv("data/TSUMOTO_C.csv",header = TRUE, sep=",", fileEncoding="latin1")
+```
+
+### Removing Duplicates Rows
+
+```{r}
+data1<-data1 %>% distinct() # all unique
+data2<-data2 %>% distinct() # all unique
+data3<-data3 %>% distinct() # 29 duplicates
+```
+
+### Replacing Space with an underscore and column names in lower case
+
+```{r}
+data1<-data1 %>%  
+  select_all(~gsub("\\s+|\\.", "_", .)) %>% 
+  select_all(tolower)
+
+data2<-data2 %>%  
+  select_all(~gsub("\\s+|\\.", "_", .)) %>% 
+  select_all(tolower)
+
+data3<-data3 %>%  
+  select_all(~gsub("\\s+|\\.", "_", .)) %>% 
+  select_all(tolower)
+```
+
+### Fill empty values with NA
+
+```{r}
+data1[data1==""]<-NA
+data2[data2==""]<-NA
+data3[data3==""]<-NA
+```
+
+# Data 1 Cleaning
+
+```{r}
+# checking duplicate ids
+length(unique(data1$id)) == nrow(data1)
+
+# remove duplicate rows by id
+data1<-distinct(data1, id, .keep_all = TRUE)
+
+# converting sex to factor datatype
+data1$sex<- as.factor(data1$sex)
+
+# cleaning the admissions vector
+data1$admission <- str_extract(string = data1$admission,pattern = "\\-|\\+")
+
+# convert birthday to date format
+data1$birthday<-as.Date(data1$birthday)
+
+# Missing Values Proportion
+visdat::vis_miss(data1)
+
+# Not Keeping Description Date, First Date Column and Diagnosis
+data1<-data1[,-c(4,5,7)]
+
+```
+
+# Data 2 Cleaning
+
+```{r}
+# Adding values in symptom column
+data2$symptoms[data2$thrombosis == '0'] <- "none"
+
+# removing rows with no id
+data2<-data2 %>% drop_na(id)
+
+# Missing Values Proportion
+visdat::vis_miss(data2)
+
+# symptoms data cleaning
+data2$symptoms <- str_extract(string = data2$symptoms,pattern = "[[:ascii:]]*")
+data2$ana <- parse_number(data2$ana)
+
+# converting exam date format
+data2$examination_date<-as.Date(data2$examination_date)
+
+# empty spaces with NA
+data2[data2==""]<-NA
+
+# Creating thrombosis boolean column
+data2$thrombosis_bol<-as.factor(ifelse(data2$thrombosis==0, 0,
+        ifelse(data2$thrombosis==1, 1,
+        ifelse(data2$thrombosis==2, 1,
+        ifelse(data2$thrombosis==3, 1,
+                        NA  )))))
+
+# kct, lac and rvvt as boolean columns
+data2$kct<-ifelse(data2$kct=="-", 1,
+        ifelse(data2$kct=="+", 0,
+                        NA  ))
+
+data2$rvvt<-ifelse(data2$rvvt=="-", 1,
+        ifelse(data2$rvvt=="+", 0,
+                        NA  ))
+
+data2$lac<-ifelse(data2$lac=="-", 1,
+        ifelse(data2$lac=="+", 0,
+                        NA  ))
+
+# remove duplicate rows by id
+data2<- distinct(data2, id, .keep_all = TRUE)
+
+# error in spelling - thrombocytepenia - thrombocytopenia
+data2$symptoms<-str_replace_all(data2$symptoms, "thrombocytepenia","thrombocytopenia")
+data2$symptoms<-str_replace_all(data2$symptoms, "Abortion","abortion")
+
+# keep only 1 symptom
+data2$symptoms<- str_extract(data2$symptoms, "^[^,()]+")
+
+# distribution of aCL IgG, aCL IgM, and aCL IgA are quite unusual: (typo maybe)
+```
+
+# Data 3 cleaning
+
+```{r,warning=FALSE}
+
+# Removing columns with more than 40% empty values
+data3 <- data3[,!colSums(is.na(data3))/nrow(data3) >= 0.4]
+data3 <- data3[,-c(19,20)]
+
+# Missing value plot
+visdat::vis_miss(data3, warn_large_data = FALSE)
+
+# Convert date format
+data3$date<-as.Date(data3$date, format = '%y%m%d')
+data3<-data3 %>% mutate_if(is.character,as.numeric)
+
+# drop rows with no id
+data3<-data3 %>% drop_na(id)
+
+# Fill missing values of numeric data
+data3 <- data3 %>% group_by(id) |> mutate(across(where(is.numeric), ~replace_na(., mean(., na.rm=TRUE)))) %>% ungroup()
+
+# WBC and RBC values do not match. WBC should be normally in the range 3500<N<9000, but all values are in the range 0.1 to 119.5. 
+```
+
+```{r}
+# Right joining datasets for Merging into 1 dataset
+data4 <- right_join(x = data1,y=data2,by="id")
+data5 <- right_join(x=data3,y=data4,by="id")
+
+# Making id variable factor datatype
+data5$id<-as.factor(data5$id)
+```
+
+# Exploratory Analysis
+
+```{r}
+# creating column age when the patient did thrombosis test (examination date - birthday)
+data5$age<-floor(as.numeric((data5$examination_date-data5$birthday)/365))
+
+# Creating time from thrombosis test in years
+data5$thrombosistestyears<-floor(as.numeric((data5$date-data5$examination_date)/365))
+
+# shape and structure of data
+dim(data5)
+str(data5)
+
+# Columns of data
+names(data5)
+
+# Data summary
+summary(data5)
+
+# Histogram
+hist.data.frame(data5 |> select(where(is.numeric))) 
+
+# Correlation Plot
+visdat::vis_cor(
+  data5 %>% select(where(is.numeric))
+)
+```
+
+# Plots Assignments
+
+Q1. How does the level of thrombosis relate to the age and level of Creatinine?
+
+```{r, warning=FALSE}
+ggplot(data5 %>% group_by(id) %>% summarise(cre_m = mean(cre), age_m=mean(age),throm = mean(thrombosis)), 
+aes(x=age_m, y=cre_m, color=factor(throm), na.rm = TRUE)) +
+  geom_point(na.rm=TRUE) +
+  facet_wrap(~throm,scales = "free", drop=TRUE)+
+   labs(x = "Age", y = "Creatinine")+ # set axis labels
+  theme(panel.border = element_rect(color = "black", fill = NA), 
+        panel.grid.major = element_line(colour = "grey90", size = 0.25), # grid lines
+        panel.grid.minor = element_line(colour = "grey95"), # grid lines
+        panel.background = element_blank(), # blank background
+        legend.key = element_blank(), # remove legend key
+        axis.title.x = element_text(color = "black", size = 14),
+        axis.title.y = element_text(color = "black", size = 14),
+        plot.title = element_text(size = 12, face = "bold"))+
+  ggtitle("Age v/s Creatinine Based on Level of Thrombosis")+
+     guides(color = guide_legend(title = "Thrombosis")) # add legend title
+
+ggsave("plot1.png")
+
+```
+
+Q2. What is the relationship between patient demographics (sex, admission status) and the presence of thrombosis, as measured by age and symptoms?
+
+```{r}
+
+
+ggplot(na.omit(data5)) +
+  aes(age, symptoms, color = thrombosis_bol, na.rm = TRUE) +
+  geom_point(na.rm = TRUE) +
+  facet_grid(sex ~ admission, drop = TRUE, scales = "free")+
+  labs(x = "Age", y = "Symptoms")+ # set axis labels
+  theme(panel.border = element_rect(color = "black", fill = NA), 
+        panel.grid.major = element_line(colour = "grey90", size = 0.25), # grid lines
+        panel.grid.minor = element_line(colour = "grey95"), # grid lines
+        panel.background = element_blank(), # blank background
+        legend.key = element_blank(), # remove legend key
+        axis.title.x = element_text(color = "black", size = 14),
+        axis.title.y = element_text(color = "black", size = 14),
+        plot.title = element_text(size = 9, face = "bold"))+
+    ggtitle("Relation between Age and Symptoms based on Patient Demographics for Thrombosis" )+
+   guides(color = guide_legend(title = "Thrombosis")) # add legend title
+
+ggsave("plot2.png")
+
+```
+
+Q3. What is the relationship between the levels of Lactate Dehydrogenase (LDH) and the years from the Thrombosis Test?
+
+```{r, warning=FALSE}
+
+data6<- data5 %>% group_by(thrombosistestyears) %>% summarise(ldh_avg = mean(ldh))
+data6<- na.omit(data6)
+data6<-data6[-c((1:5),18),]
+
+ggplot(data6, aes(thrombosistestyears, ldh_avg)) + 
+  geom_area() + 
+  scale_y_continuous()+
+  scale_x_continuous(breaks = seq(-8,3,1))+
+  labs(title="Area Chart",
+       y="Lactate Dehydrogenase",
+       x="Thrombosis Test Years")+
+  theme(panel.border = element_rect(color = "black", fill = NA), 
+        panel.grid.major = element_line(colour = "grey90", size = 0.25), # grid lines
+        panel.grid.minor = element_line(colour = "grey95"), # grid lines
+        panel.background = element_blank(), # blank background
+        legend.key = element_blank(), # remove legend key
+        axis.title.x = element_text(color = "black", size = 14),
+        axis.title.y = element_text(color = "black", size = 14),
+        plot.title = element_text(size = 12, face = "bold"))+
+      geom_vline(xintercept =0, linetype="dashed", color = "red", size=1)+    
+  ggtitle("Lactate Dehydrogenase vs Thrombosis Test Years" )
+
+ggsave("plot3.png")
+
+```
+
+Q4. What is the relationship between levels of uric acid and urea nitrogen based on thrombosis and gender?
+
+```{r, warning=FALSE}
+ggplot(data5)+ aes(x=un, y=ua, color=factor(thrombosis),shape=sex, na.rm=T) + 
+  geom_point(na.rm = T)+
+  facet_grid(~thrombosis, scales = "free", drop=T)+
+   labs(title="Area Chart", y="Uric Acid", x="Urea Nitrogen")+
+  theme(panel.border = element_rect(color = "black",fill=NA), 
+        panel.grid.major = element_line(colour = "grey90", size = 0.25), # grid lines
+        panel.grid.minor = element_line(colour = "grey95"), # grid lines
+        panel.background = element_blank(), # blank background
+        legend.key = element_blank(), # remove legend key
+        axis.title.x = element_text(color = "black", size = 14),
+        axis.title.y = element_text(color = "black", size = 14),
+        plot.title = element_text(size = 12, face = "bold"))+
+        scale_shape_discrete(na.translate = F)+
+    ggtitle("Relation between Uric Acid and Urea Nitrogen Based on Thrombosis and Gender" )+
+  guides(color = guide_legend(title = "thrombosis")) # add legend title
+  
+ggsave("plot4.png")
+
+```
+
+# Technical Summary
+
+The data set consists of three different tables: TSUMOTO_A.CSV contains basic data of 1240 patients like birthday, sex, and day of first visit at the hospital. TSUMOTO_B.CSV contains the results of a 806 special laboratory examination performed for patients with suspect of thrombosis. It also contains the diagnosed level of thrombosis. TSUMOTO_C.CSV contains the results of 57574 standard laboratory examinations for 1236 patients. In general there are many table en- tries for one patient at different dates.
+
+### For Data Cleaning and Exploratory Analysis:
+
+For TSUMOTO_A.CSV: The original table contains basic information about 1240 patients with only 1238 different IDs. We converted the sex variable to factor, cleaned the admissions vector by removing unnecessary characters, converted birthday to date format, and removed description date and first date column since they had high missing values and unneccessary characters.
+
+For TSUMOTO_B.CSV:The original table contains the results of the special laboratory examinations and the diagnosed level of thrombosis (0-3). We added the Boolean attribute Thrombosis_bol which indicates if a person has thrombosis(1-3) or not(0).Some patients had more than 1 examinations, two of them even on the same day but with different results. We removed them and kept 767 remaining patients. The value distributions of aCL IgG, aCL IgM, and aCL IgA are quite unusual: Over 95% of the values of aCL IgG are lower than 30 and the remaining increase up to 1502.4 The value distribution of aCL IgM is similar but the maximum value is even 187122, which is probably a typo. More than half of the values of aCL IgA are zero, most values are less than 330, and one is 48547 which is also probably a typo. The attribute Symptoms contains some nonsense entries and some typos (see e.g. Figure 6: thrombocytepenia instead of thrombocytopenia). KCT, RWT, and LAC were rarely measured.They are converted to bolean variables for simplification. When thrombosis=0, making symptoms as no symptoms. Affitionally, cleaning the symptoms column to keep the most important symptom only. Converting examination date to date format.
+
+For TSUMOTO_C.CSV: The original table contains the results of about 57575 standard laboratory examinations. They have 29 duplicate rows which are elimanted . Now there are 57545 enteries for 1236 different patients (IDs). For each patient there are 1-401 tests, performed at different dates. Data from about 40 tests are available, most of them numeric. Most value ranges seem to be plausible, but for WBC (white blood cell), RBC (red blood cell), FG (fibrinogen), PIC, and TAT the specified normal range did not match the data. Removing columns with 40% or more data missing for simplification. Converting date variable to date format. Dropping rows with no id. Converting relevant columns to numeric. Filling the missing values using mean, grouped by id variable.
+
+After cleaning the datasets, we merge the data from different tables to create a comprehensive patient profile. We consider only the patients that are common in all three datasets. Additionally, we create new columns in the dataset, which are as follows: 
+
+1.Age: This is the age of the patient in the database on the date of the thrombosis test.
+
+2.Thrombosis_bol: It is a Boolean variable indicating if a patient has thrombosis or not.
+
+3.Thrombosistestyears: It calculates the time distance between the standard laboratory examination and the thrombosis test.
+
+### Findings
+
+1.  The target attribute Thrombosis was probably defined through the attribute Symptoms:
+a.  Thrombosis is 3, if and only if Symptoms is thrombocytopenia,
+b.  Thrombosis is 2, if and only if Symptoms is CNS lupus, CNS lupus (headache), or CNS susp., Thrombosis is 1, if there is any another symptom present, and
+c.  Thrombosis is 0, if no symptom is present
+
+2.  94% of the patients with thrombosis are female.
+
+3.  High values of aCL IgG, aCL IgM, or aCL IgA are good indicators for thrombosis.
+
+4.  As the level of thrombosis increases, the concentration of both uric acid and urea nitrogen decreases, indicating an inverse relationship between the two.
+
+5.  Regular monitoring of Lactate Dehydrogenase levels may be beneficial for those who are at high risk of developing thrombosis.
+
+6.  There exists negative correlation between the severity of thrombosis and creatinine levels in patients.
